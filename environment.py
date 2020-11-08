@@ -12,22 +12,30 @@ class environment:
         else:
             wandb.init(project="tic-tac-toe",config=config)
             self.config = config
-        self.agent = agent(
+        self.agentX = agent(
             discount=self.config['discount'],
             exploration_rate=self.config['exploration_rate'],
             decay_factor=self.config['decay_factor'],
-            learning_rate=self.config['learning_rate']
+            learning_rate=self.config['learning_rate'],
+            'X'
+            )
+        self.agentO = agent(
+            discount=self.config['discount'],
+            exploration_rate=self.config['exploration_rate'],
+            decay_factor=self.config['decay_factor'],
+            learning_rate=self.config['learning_rate'],
+            'O'
             )
         self.initGame()
         self.metrics = {
-            #'tot_win' : 0,
-            #'tot_draw' : 0,
-            #'tot_lose': 0,
-            #'exploration_rate' : self.agent.exploration_rate,
+            'x_win' : 0,
+            'o_win' : 0,
+            'tie': 0,
+            'exploration_rate' : self.agent.exploration_rate,
         }
 
     def initGame(self):
-        #self.state = {'player_sum':0,'dealer_sum':0} 
+        self.state = '         '
 
     def start(self):
         for episode in range(1,self.config['episode']+1):
@@ -44,16 +52,6 @@ class environment:
             self.metrics['exploration_rate'] = self.agent.exploration_rate
             wandb.log(self.metrics,step=episode)
 
-    def play(self,action):
-        new_state = self.state.copy()
-        ended = False
-#        if action:
-#            new_state['player_sum'] += self.hit()
-#        else:
-#            ended = True
-#        if new_state['player_sum'] > 21:
-#            ended = True
-        return new_state, ended
                 
     def findWinner(self):
 #        # player 1 | draw 0 | dealer -1

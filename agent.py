@@ -5,13 +5,20 @@ import wandb
 
 class agent:
 
-    def __init__(self,discount,exploration_rate,decay_factor, learning_rate):
+    def __init__(self,discount,exploration_rate,decay_factor, learning_rate,sign):
         self.discount = discount # How much we appreciate future reward over current
         self.exploration_rate = exploration_rate # Initial exploration rate
         self.decay_factor = decay_factor
         self.learning_rate = learning_rate
+        self.sign = sign
         self.q_table = {}
         
+
+    def play(self,old_state,action):
+        state = old_state.copy()
+        
+        if state[action] == ' '
+
     def get_next_action(self, state):
         if random.random() < self.exploration_rate: # Explore (gamble) or exploit (greedy)
             return self.random_action()
@@ -24,11 +31,9 @@ class agent:
         return random.random() > 0.5
 
     def getQ(self,state):
-        player_sum = state['player_sum']
-        dealer_sum = state['dealer_sum']
-        if (player_sum,dealer_sum) not in self.q_table:
-            self.q_table[(player_sum,dealer_sum)] = [0,0]
-        return self.q_table[(player_sum,dealer_sum)]
+        if state not in self.q_table:
+            self.q_table[state] = np.zeros(9)
+        return self.q_table[state]
 
     def train(self, old_state, new_state, action, reward):
         
@@ -37,13 +42,12 @@ class agent:
 
         old_state_prediction = ((1-self.learning_rate) * old_state_prediction) + (self.learning_rate * (reward + self.discount * np.amax(new_state_prediction)))
 
-        #self.q_table[(old_state['player_sum'],old_state['dealer_sum'])][action] = old_state_prediction
+        self.q_table[old_state][action] = old_state_prediction
         return old_state_prediction
 
     def update(self, old_state, new_state, action, reward):        
-        reward = self.train(old_state, new_state, action, reward)
+        self.train(old_state, new_state, action, reward)
         self.exploration_rate *= self.decay_factor
-        return reward
 
     def save(self, file="policy"):
         fw = open(file, 'wb')
