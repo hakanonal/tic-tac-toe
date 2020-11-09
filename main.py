@@ -10,7 +10,7 @@ config = {
     'debug' : 0,
     'print_state' : 0
 }
-#os.environ['WANDB_MODE'] = 'dryrun'
+os.environ['WANDB_MODE'] = 'dryrun'
 
 e = environment(config=config)
 
