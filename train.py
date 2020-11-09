@@ -7,4 +7,4 @@ def train():
     e.save() 
 
 
-wandb.agent('hakanonal/tic-tac-toe/xxxx',function=train)
+wandb.agent('hakanonal/tic-tac-toe/bcb86vib',function=train)

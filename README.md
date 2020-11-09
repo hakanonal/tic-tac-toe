@@ -29,4 +29,7 @@ I have inspired this project from a conference called [IstanbulTechWeek](https:/
 - I have coded so far that only the findWinner method is missing.
     - and done...
 - Also in the agent class I need to select the random and greedy action properly among from the valid actions only.
-    - 
+    - done also
+- So my first runs are very fasinating. First of all it very fast. and the results are beinig converges pretty quicklly. I have executed couple of different runs trying different decay factors. 
+- A sweep would be completed pretty quickly. Let's see how is it going to be...
+    - It's workinig great it is workiing super fast and results can be seen from [here](https://wandb.ai/hakanonal/tic-tac-toe)

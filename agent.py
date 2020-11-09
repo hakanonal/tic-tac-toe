@@ -16,21 +16,31 @@ class agent:
 
     def play(self,old_state,action):
         state = old_state
-        assert state[action] != " "
-        state[action] = self.sign
+        assert state[action] == ' '
+        state = state[:action] + self.sign + state[action+1:]
         return state
 
     def get_next_action(self, state):
         if random.random() < self.exploration_rate: # Explore (gamble) or exploit (greedy)
-            return self.random_action()
+            return self.random_action(state)
         else:
             return self.greedy_action(state)
 
-    #!!!! these action are wrong they need to give valid actions. It should between 0 and 8 and also the action position has to be empty on the table.
+    #!!!! these action are wrong they need to give valid actions. It should be between 0 and 8 and also the action position has to be empty on the state.
+    def actionSpaceOfState(self,state):
+        return [pos for pos, char in enumerate(state) if char == " "]
     def greedy_action(self, state):
-        return np.argmax(self.getQ(state))
-    def random_action(self):
-        return random.random() > 0.5
+        action_space = self.actionSpaceOfState(state)
+        filtered_q_table = []
+        q_table_state = self.getQ(state)
+        for i in range(9):
+            if i in action_space:
+                filtered_q_table.append(q_table_state[i])
+            else:
+                filtered_q_table.append(-999999999999)
+        return np.argmax(filtered_q_table)
+    def random_action(self,state):
+        return random.choice(self.actionSpaceOfState(state))
     #!!!!!!!
 
     def getQ(self,state):

@@ -105,7 +105,7 @@ class environment:
             input("continue?")
 
     def printState(self,state):
-        if(self.config['debug']):
+        if(self.config['print_state']):
             print("%s|%s|%s"%(state[0],state[1],state[2]))
             print("-----")
             print("%s|%s|%s"%(state[3],state[4],state[5]))
