@@ -4,8 +4,7 @@ import wandb
 def train():
     e = environment()
     e.start()
-    e.agent.save()
-    e.agent.printQTable()    
+    e.save() 
 
 
 wandb.agent('hakanonal/tic-tac-toe/xxxx',function=train)

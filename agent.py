@@ -15,7 +15,7 @@ class agent:
         
 
     def play(self,old_state,action):
-        state = old_state.copy()        
+        state = old_state
         assert state[action] != " "
         state[action] = self.sign
         return state
@@ -63,4 +63,23 @@ class agent:
     def load(self, file="policy"):
         fr = open(file+'_'+self.sign, 'rb')
         self.q_table = pickle.load(fr)
-        fr.close()        
+        fr.close()  
+
+    def didIWin(self,state):
+        if state[0] == self.sign and state[1] == self.sign and state[2] == self.sign:
+            return True
+        if state[3] == self.sign and state[4] == self.sign and state[5] == self.sign:
+            return True
+        if state[6] == self.sign and state[7] == self.sign and state[8] == self.sign:
+            return True
+        if state[0] == self.sign and state[3] == self.sign and state[6] == self.sign:
+            return True
+        if state[1] == self.sign and state[4] == self.sign and state[7] == self.sign:
+            return True
+        if state[2] == self.sign and state[5] == self.sign and state[8] == self.sign:
+            return True
+        if state[0] == self.sign and state[4] == self.sign and state[8] == self.sign:
+            return True
+        if state[2] == self.sign and state[4] == self.sign and state[6] == self.sign:
+            return True
+        return False

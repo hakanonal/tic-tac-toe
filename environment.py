@@ -1,4 +1,3 @@
-import random
 from agent import agent
 import wandb
 
@@ -17,14 +16,14 @@ class environment:
             exploration_rate=self.config['exploration_rate'],
             decay_factor=self.config['decay_factor'],
             learning_rate=self.config['learning_rate'],
-            'X'
+            sign="X"
             )
         self.agentO = agent(
             discount=self.config['discount'],
             exploration_rate=self.config['exploration_rate'],
             decay_factor=self.config['decay_factor'],
             learning_rate=self.config['learning_rate'],
-            'O'
+            sign="O"
             )
         self.initGame()
         self.metrics = {
@@ -36,7 +35,7 @@ class environment:
         }
 
     def initGame(self):
-        self.state = '         '
+        self.state = "         "         
         self.actions_played = []
         self.turn = 1
 
@@ -48,17 +47,18 @@ class environment:
                 
                 if self.turn == 1:
                     action_to_play = self.agentX.get_next_action(self.state)
-                    new_state = self.agentX.play(action_to_play)
+                    new_state = self.agentX.play(self.state,action_to_play)
                 if self.turn == -1:
                     action_to_play = self.agentO.get_next_action(self.state)
-                    new_state = self.agentO.play(action_to_play)
+                    new_state = self.agentO.play(self.state,action_to_play)
 
                 self.debug1(episode,self.state,new_state,action_to_play)
                 self.actions_played.append((self.state,new_state,action_to_play))
                 self.state = new_state
+                self.printState(self.state)
                 self.turn *= -1
                 winner = self.findWinner()
-                if reward != None:
+                if winner is not None:
                     break
 
 
@@ -86,9 +86,29 @@ class environment:
                 
     def findWinner(self):
         # Win-X=1 | tie=0 | Win-O=-1 | game not ended=null
+        if self.agentX.didIWin(self.state):
+            return 1
+        if self.agentO.didIWin(self.state):
+            return -1
+        if self.state.find(" ") == -1:
+            return 0
+        return None
         
+    def save(self):
+        self.agentX.save()
+        self.agentO.save()
+
     
     def debug1(self,episode,old_state,new_state,action):
         if(self.config['debug']):
             print("%d = %s -> %s -> %s"%(episode,old_state,action,new_state))
+            input("continue?")
+
+    def printState(self,state):
+        if(self.config['debug']):
+            print("%s|%s|%s"%(state[0],state[1],state[2]))
+            print("-----")
+            print("%s|%s|%s"%(state[3],state[4],state[5]))
+            print("-----")
+            print("%s|%s|%s"%(state[6],state[7],state[8]))
             input("continue?")

@@ -26,4 +26,7 @@ I have inspired this project from a conference called [IstanbulTechWeek](https:/
 - I am not sure how frequent should I update q-table, however from my blackjack project experience I am going to update and back propagate after the game ends.
     - Well also I have relized that Joe also did the sam way.
     - So I have copied the nececary update function into the agent class so that we can backpropagate for each agent seperatelly.
-- I have coded so far that only the findWinner method is missing. Also in the agent class I need to select the random and greedy action properly among from the valid actions only.
+- I have coded so far that only the findWinner method is missing.
+    - and done...
+- Also in the agent class I need to select the random and greedy action properly among from the valid actions only.
+    - 
