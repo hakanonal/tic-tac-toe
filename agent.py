@@ -15,9 +15,10 @@ class agent:
         
 
     def play(self,old_state,action):
-        state = old_state.copy()
-        
-        if state[action] == ' '
+        state = old_state.copy()        
+        assert state[action] != " "
+        state[action] = self.sign
+        return state
 
     def get_next_action(self, state):
         if random.random() < self.exploration_rate: # Explore (gamble) or exploit (greedy)
@@ -25,10 +26,12 @@ class agent:
         else:
             return self.greedy_action(state)
 
+    #!!!! these action are wrong they need to give valid actions. It should between 0 and 8 and also the action position has to be empty on the table.
     def greedy_action(self, state):
         return np.argmax(self.getQ(state))
     def random_action(self):
         return random.random() > 0.5
+    #!!!!!!!
 
     def getQ(self,state):
         if state not in self.q_table:
@@ -45,17 +48,19 @@ class agent:
         self.q_table[old_state][action] = old_state_prediction
         return old_state_prediction
 
-    def update(self, old_state, new_state, action, reward):        
-        self.train(old_state, new_state, action, reward)
+    def update(self, actions_played, reward):
+        for old_state,new_state,action in reversed(actions_played):
+            new_reward = self.train(old_state, new_state, action, reward)
+            reward = new_reward
         self.exploration_rate *= self.decay_factor
 
     def save(self, file="policy"):
-        fw = open(file, 'wb')
+        fw = open(file+'_'+self.sign, 'wb')
         pickle.dump(self.q_table, fw)
         fw.close()
-        wandb.save(file)
+        wandb.save(file+'_'+self.sign)
 
     def load(self, file="policy"):
-        fr = open(file, 'rb')
+        fr = open(file+'_'+self.sign, 'rb')
         self.q_table = pickle.load(fr)
         fr.close()        

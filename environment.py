@@ -28,52 +28,67 @@ class environment:
             )
         self.initGame()
         self.metrics = {
-            'x_win' : 0,
-            'o_win' : 0,
-            'tie': 0,
-            'exploration_rate' : self.agent.exploration_rate,
+            'X_tot_win' : 0,
+            'O_tot_win' : 0,
+            'tot_draw': 0,
+            'x_exploration_rate' : self.agentX.exploration_rate,
+            'o_exploration_rate' : self.agentO.exploration_rate,
         }
 
     def initGame(self):
         self.state = '         '
+        self.actions_played = []
+        self.turn = 1
 
     def start(self):
         for episode in range(1,self.config['episode']+1):
             self.initGame()
-            #player turn
+            #game phase
             while True:
-                action_to_play = self.agent.get_next_action(self.state)
-                new_state, ended = self.play(action_to_play)
+                
+                if self.turn == 1:
+                    action_to_play = self.agentX.get_next_action(self.state)
+                    new_state = self.agentX.play(action_to_play)
+                if self.turn == -1:
+                    action_to_play = self.agentO.get_next_action(self.state)
+                    new_state = self.agentO.play(action_to_play)
+
+                self.debug1(episode,self.state,new_state,action_to_play)
                 self.actions_played.append((self.state,new_state,action_to_play))
                 self.state = new_state
-                if ended:
+                self.turn *= -1
+                winner = self.findWinner()
+                if reward != None:
                     break
 
-            self.metrics['exploration_rate'] = self.agent.exploration_rate
+
+            #q-tatble update backpropogation phase
+            if winner == 1:
+                self.metrics['X_tot_win'] += 1
+                self.metrics['X_avg_win'] = self.metrics['X_tot_win'] / episode
+                self.agentX.update(self.actions_played,1)
+                self.agentO.update(self.actions_played,-1)
+            if winner == 0:
+                self.metrics['tot_draw'] += 1
+                self.metrics['avg_draw'] = self.metrics['tot_draw'] / episode
+                self.agentX.update(self.actions_played,0)
+                self.agentO.update(self.actions_played,0)
+            if winner == -1:
+                self.metrics['O_tot_win'] += 1
+                self.metrics['O_avg_win'] = self.metrics['O_tot_win'] / episode
+                self.agentX.update(self.actions_played,-1)
+                self.agentO.update(self.actions_played,1)
+
+            self.metrics['x_exploration_rate'] = self.agentX.exploration_rate
+            self.metrics['o_exploration_rate'] = self.agentO.exploration_rate
             wandb.log(self.metrics,step=episode)
 
                 
     def findWinner(self):
-#        # player 1 | draw 0 | dealer -1
-#        winner = 0
-#        if self.state['player_sum'] > 21:
-#            if self.state['dealer_sum'] > 21:
-#                winner = -1
-#            else:
-#                winner = -1
-#        else:
-#            if self.state['dealer_sum'] > 21:
-#                winner = 1
-#            else:
-#                if self.state['player_sum'] < self.state['dealer_sum']:
-#                    winner = -1
-#                elif self.state['player_sum'] > self.state['dealer_sum']:
-#                    winner = 1
-#                else:
-#                    winner = 0
-#        return winner
+        # Win-X=1 | tie=0 | Win-O=-1 | game not ended=null
+        
     
-#    def debug1(self,episode,old_state,new_state,action):
-#        if(self.config['debug']):
-#            print("%d = %s -> %s -> %s"%(episode,old_state,action,new_state))
-#            input("continue?")
+    def debug1(self,episode,old_state,new_state,action):
+        if(self.config['debug']):
+            print("%d = %s -> %s -> %s"%(episode,old_state,action,new_state))
+            input("continue?")
