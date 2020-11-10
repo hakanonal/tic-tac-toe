@@ -42,3 +42,8 @@ I have inspired this project from a conference called [IstanbulTechWeek](https:/
 - I will implement to reset the explortion rate back to original config so that it will continue to explore.
     - I have imiplemented it. It converges to draw arround 0.3 and 0.5.
 - I will deploy it to my server so that it can run long enough in the background.
+    - Well the dployment has done and more then 900 runs has been executed. The sweep results are [here](https://wandb.ai/hakanonal/tic-tac-toe/sweeps/1gppraot).
+
+## Conclusion
+
+This project was a fun project to make. I spent only 3 days (no more than 6 hours in total). Exploration rate has a significant importance on the model. After enogh exploration without exploration agents generally clever enough to not loose so draw outcome is the result. Please note that this project is just for hoby purposes. Thank you...
