@@ -6,8 +6,9 @@ import wandb
 class agent:
 
     def __init__(self,discount,exploration_rate,decay_factor, learning_rate,sign):
-        self.discount = discount # How much we appreciate future reward over current
-        self.exploration_rate = exploration_rate # Initial exploration rate
+        self.discount = discount 
+        self.exploration_rate = exploration_rate
+        self.exploration_rate_constant = exploration_rate
         self.decay_factor = decay_factor
         self.learning_rate = learning_rate
         self.sign = sign
@@ -63,6 +64,8 @@ class agent:
             new_reward = self.train(old_state, new_state, action, reward)
             reward = new_reward
         self.exploration_rate *= self.decay_factor
+        if self.exploration_rate < 0.01:
+            self.exploration_rate = self.exploration_rate_constant
 
     def save(self, file="policy"):
         fw = open(file+'_'+self.sign, 'wb')

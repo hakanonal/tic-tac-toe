@@ -33,3 +33,12 @@ I have inspired this project from a conference called [IstanbulTechWeek](https:/
 - So my first runs are very fasinating. First of all it very fast. and the results are beinig converges pretty quicklly. I have executed couple of different runs trying different decay factors. 
 - A sweep would be completed pretty quickly. Let's see how is it going to be...
     - It's workinig great it is workiing super fast and results can be seen from [here](https://wandb.ai/hakanonal/tic-tac-toe)
+
+
+#### 10.11.2020
+
+- There are some wierd results though. There are pretty much substential amount of runs that O wins a lot. I mean more then %90 of the games.
+- I bealive stopping the exploration rate too quicklly will result to give advantage to one oponent to other. However it is wierd that I was exptecting  more wins from X
+- I will implement to reset the explortion rate back to original config so that it will continue to explore.
+    - I have imiplemented it. It converges to draw arround 0.3 and 0.5.
+- I will deploy it to my server so that it can run long enough in the background.
